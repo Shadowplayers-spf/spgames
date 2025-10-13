@@ -1,0 +1,51 @@
+
+body{
+	padding:0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.hidden{
+	display: none !important;
+}
+
+input, select, textarea{
+	font-size: min(4vmax, 24px);
+}
+
+#joinGame{
+
+}
+
+a, *.link{
+	font-weight: bold;
+}
+
+
+
+#footer{
+	position: fixed;
+	bottom:0; right:0;
+}
+
+#modal{
+	position: fixed;
+	left:0; top:0; right:0; bottom:0;
+	backdrop-filter: blur(3px);
+	background: rgba(0,0,0,.5);
+}
+
+#modal > div.body{
+	background:rgba(0,0,0,.9);
+	text-align: center;
+	max-height:90%;
+	left:0; right:0;
+	top:50%;
+	overflow:auto;
+	transform:translateY(-50%);
+	padding: 3vh 3vw;
+	position:absolute;
+}
+
+
+
+

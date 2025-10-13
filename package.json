@@ -1,0 +1,17 @@
+{
+  "name": "webgames",
+  "version": "1.0.0",
+  "description": "Handles web games for shadowplayers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shadowplayers",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mariadb": "^3.4.5",
+    "socketio": "^1.0.0"
+  },
+  "type": "module"
+}

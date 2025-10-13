@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadowplayers Web-Spel</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	
+	<div id="joinGame">
+		<form id="joinGame">
+			<h3>Gå med i ett pågående spel:</h3>
+			<label>Spelkod: <input name="code" type="text" required /></label>
+			<label>Namn: <input name="name" type="text" required /></label>
+			<input type="submit" value="Starta" />
+		</form>
+	</div>
+
+	<!-- This one is handled by specific games -->
+	<div id="game"></div>
+
+	<div id="footer">
+		<div class="link" id="login">Logga In</div>
+		<div class="username hidden"> <span class="logout link">Logga Ut</span></div>
+	</div>
+
+	<div id="modal" class="hidden">
+		<div class="body"></div>
+	</div>
+
+	<script type="module">
+
+		import Index from '/js/Index.js';
+		window.app = new Index();
+		console.log("Use window.app for debugging");
+		window.app.begin();
+
+	</script>
+
+</body>
