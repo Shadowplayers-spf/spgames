@@ -9,12 +9,20 @@
 <body>
 	
 	<div id="joinGame">
-		<form id="joinGame">
-			<h3>Gå med i ett pågående spel:</h3>
+		<form id="joinGameForm">
+			<h2>Gå med i ett pågående spel:</h2>
 			<label>Spelkod: <input name="code" type="text" required /></label>
 			<label>Namn: <input name="name" type="text" required /></label>
 			<input type="submit" value="Starta" />
 		</form>
+	</div>
+	<div id="hostList" class="hidden">
+		<h2>Host</h2>
+		<div class="gameListing"></div>
+	</div>
+	<div id="editorList" class="hidden">
+		<h2>Redigera</h2>
+		<div class="gameListing"></div>
 	</div>
 
 	<!-- This one is handled by specific games -->

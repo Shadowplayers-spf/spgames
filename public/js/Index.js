@@ -1,12 +1,15 @@
 import Fetch from "./Fetch.js";
 import Game from "./Game.js";
-import * as Dom from './helpers/Dom.js'
+import * as Dom from './_Dom.js'
 import User from "./User.js";
 
 export default class Index{
 
-	activeGame = new Game();
-	user = new User();
+	computerId = "";				// Used when playing to identify this device
+	registeredGames = [];			// Game objects of games that can be played
+
+	activeGame = new Game();		// Active game playerd
+	user = new User();				// Only needed for the editor.
 
 	modalWrapper = document.getElementById("modal");
 	modalBase = document.querySelector("#modal > div.body");
@@ -14,6 +17,13 @@ export default class Index{
 	constructor(){}
 
 	async begin(){
+
+		if( !this.computerId )
+			this.computerId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+
+		this.registeredGames = [
+			new Game({label:"jeopardy", name:"Jeopardy", loader:"jeopardy"})
+		];
 
 		this.modalWrapper.addEventListener("click", () => {
 			this.hideModal();
@@ -100,9 +110,22 @@ export default class Index{
 		document.getElementById('logout').classList.toggle("hidden", !this.user.exists());
 		document.getElementById('logout').querySelector("span").innerText = 'Inloggad som '+this.user.nick;
 
+		document.getElementById("hostList").classList.toggle("hidden", !this.user.isAdmin());
+		document.getElementById("editorList").classList.toggle("hidden", !this.user.isAdmin());
+
+
+		const hostList = document.querySelector("#hostList > div.gameListing");
+		const editorList = document.querySelector("#editorList > div.gameListing");
+		for( let game of this.registeredGames ){
+			let host = Dom.create("div", {class:"game"}, hostList);
+			host.innerText = game.name;
+			
+			let editor = Dom.create("div", {class:"game"}, editorList);
+			editor.innerText = game.name;
+			
+		}
+
 	}
-
-
 
 }
 
