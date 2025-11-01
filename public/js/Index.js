@@ -1,11 +1,12 @@
 import Fetch from "./Fetch.js";
 import Game from "./Game.js";
 import * as Dom from './helpers/Dom.js'
+import User from "./User.js";
 
 export default class Index{
 
 	activeGame = new Game();
-	user = null;
+	user = new User();
 
 	modalWrapper = document.getElementById("modal");
 	modalBase = document.querySelector("#modal > div.body");
@@ -19,9 +20,27 @@ export default class Index{
 		});
 		this.modalBase.addEventListener("click", event => {event.stopImmediatePropagation();});
 		document.getElementById('login').addEventListener("click", this.showLogin.bind(this));
+		document.getElementById('logout').addEventListener("click", this.logOut.bind(this));
+
+		Fetch.setOnTokenExpired(this.onTokenExpired.bind(this));
+
+		// Auto login if we have a token
+		let f = new Fetch('server', 'GetUser', [], {});
+		try{
+			let att = await f.run();
+			this.user = new User(att.user);
+			this.drawLogin();
+		}catch(err){}
 
 	}
 
+	onTokenExpired(){
+
+		if( this.user.exists() )
+			this.logOut();
+		throw new Error("Din session har gått ut");		
+
+	}
 
 	// Modal
 	setModal( element ){
@@ -53,9 +72,33 @@ export default class Index{
 				pass : password.value
 			});
 			const res = await f.run();
-			console.log("Response", res);
+			if( res.user && res.user.session_token ){
+
+				this.user = new User(res.user);
+				localStorage.session = res.user.session_token;
+				this.hideModal();
+				this.drawLogin();
+
+			}
 
 		});
+
+	}
+
+	logOut(){
+
+		localStorage.removeItem("session");
+		this.user = new User();
+		this.drawLogin();
+
+	}
+
+	// Toggles the login
+	drawLogin(){
+
+		document.getElementById('login').classList.toggle("hidden", this.user.exists());
+		document.getElementById('logout').classList.toggle("hidden", !this.user.exists());
+		document.getElementById('logout').querySelector("span").innerText = 'Inloggad som '+this.user.nick;
 
 	}
 

@@ -18,6 +18,7 @@ input, select, textarea{
 
 a, *.link{
 	font-weight: bold;
+	cursor:pointer;
 }
 
 

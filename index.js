@@ -12,14 +12,12 @@ const __dirname = dirname(__filename);
 
 
 // Load up the DB connections
-const connUser = new DBConnection(Config.db_user_user, Config.db_user_pass, Config.db_user_db);
 const connGame = new DBConnection(Config.db_game_user, Config.db_game_pass, Config.db_game_db);
 (async () => {
 
-    await connUser.connect();
     await connGame.connect();
 
-    Rest.init(connGame, connUser);
+    Rest.init(connGame);
 
     const port = 8090;
     const app = express();
@@ -39,6 +37,7 @@ const connGame = new DBConnection(Config.db_game_user, Config.db_game_pass, Conf
             out = {
                 error : err.message || err
             };
+            console.error("Hit an error:", err.message || err);
         }
 
         res.json(out);

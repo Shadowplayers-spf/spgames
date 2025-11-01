@@ -1,14 +1,12 @@
-import User from "./User";
+import User from "./User.js";
 
 export default class Rest{
 
 	static games = new Map();
 
 	static dbGames = null;
-	static dbUsers = null;
-	static init( dbGames, dbUsers ){
+	static init( dbGames ){
 		this.dbGames = dbGames;
-		this.dbUsers = dbUsers;
 	}
 	static addGame( label, gConstructor ){
 		if( label === "server" )
@@ -22,8 +20,8 @@ export default class Rest{
 	user = null;
 	args = [];
 	body = {};
-	
-	
+
+
 
 	constructor( req, db ){
 
@@ -34,15 +32,14 @@ export default class Rest{
 		this.args = path.slice(3);
 		// Get JSON from post
 		this.body = req.body;
-		
+
 	}
 
 	async run(){
 
 		if( this.game !== "server" && !Rest.games.has(this.game) )
 			throw new Error("Game not found");
-		
-		let out = {};
+
 
 		// Target this by default
 		let targ = this;
@@ -54,45 +51,61 @@ export default class Rest{
 
 		}
 
-		console.log(this.task);
 		let fnName = this.task;
 		// Public level privilege
 		if( typeof targ['pub'+fnName] === "function" ){
-			out = await targ['pub'+fnName](...this.args);
+			return await targ['pub'+fnName](...this.args);
 		}
+
+		// These require a user
+		this.user = await User.fromToken(this.body.__token);
+
+		// Throwing 403 tells the app to log out
+		if( !this.user.exists() )
+			throw 403;
+
 		// User level privilege
-		else if( typeof targ['usr'+fnName] === "function" ){
-			out = await targ['usr'+fnName](...this.args);
-		}
+		if( typeof targ['usr'+fnName] === "function" )
+			return await targ['usr'+fnName](...this.args);
+
 		// Admin level privilege
-		else if( typeof targ['adm'+fnName] === "function" ){
-			out = await targ['adm'+fnName](...this.args);
-		}
-		else
-			throw new Error("Task not found");
+		if( !this.user.isAdmin() )
+			throw new Error("Access denied");
+
+		if( typeof targ['adm'+fnName] === "function" )
+			return await targ['adm'+fnName](...this.args);
 
 
-		return out;
+		throw new Error("Task not found");
 
 	}
 
 	async pubLogin(){
 
 		if( !this.body.user || !this.body.pass ){
-			
+
 			throw new Error("Ingen användare eller lösen hittades");
 
 		}
+		// Can be improved on later, since we're only fetching an existing token, which is far from the safest option
+		this.user = await User.fromLogin(this.body.user, this.body.pass); // fromLogin populates the token field
+		return {
+			user : this.user.getOut(true),
+		};
 
-		this.user = await User.fromUserPass( Rest.dbUsers, this.body.user, this.body.pass );
-		// Return a session token
-		
+	}
+
+
+	// Gets active user by token
+	async usrGetUser(){
+
+		return {
+			user : this.user.getOut(false),
+		};
 
 	}
 
 
 
-
-	
 
 }
