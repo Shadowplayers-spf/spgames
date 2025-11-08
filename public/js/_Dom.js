@@ -23,6 +23,10 @@ export function create( type, options, parent ){
 			out.value = options.value;
 		if( options.autocomplete )
 			out.autocomplete = options.autocomplete;
+		if( options.text )
+			out.innerText = options.text;
+		if( options.html )
+			out.innerHTML = options.html;
 
 	}
 	else
