@@ -20,7 +20,9 @@ export default class Game extends GameTemplate{
 
         const dom = this.dom;
         Dom.create("h1", {text:"Editing Jeopardy"}, dom);
-        console.log("Created and appended stuff to dom", dom);
+        
+        
+
 
     }
 

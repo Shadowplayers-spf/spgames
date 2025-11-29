@@ -3,7 +3,8 @@ export default class AutoLoader{
 
 	id = 0;
 
-	constructor(){
+	constructor( ){
+
 	}
 
 	load( data ){
