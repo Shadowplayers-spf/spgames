@@ -34,7 +34,7 @@ export default class Index{
 			this.computerId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
 		this.registeredGames = [
-			new GameLoader({label:"jeopardy", name:"Jeopardy", loader:"jeopardy"})
+			new GameLoader({label:"jeopardy", name:"Jeopardy", loader:"jeopardy"}, this)
 		];
 
 		this.modalWrapper.addEventListener("click", () => {

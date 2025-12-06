@@ -1,3 +1,6 @@
+import Fetch from "../../js/Fetch.js";
+
+
 // Extend this from your game
 export default class GameTemplate{
 
@@ -10,6 +13,7 @@ export default class GameTemplate{
 
     dom = null;     // Dom element we're working in
     args = [];      // Location args
+    gameLoader = null;
 
     mode = GameTemplate.Mode.None;
 
@@ -19,9 +23,23 @@ export default class GameTemplate{
     async loadHost(){ console.trace("GameTemplate.loadHost"); }
     async destructor(){ }
 
-    constructor( dom, args ){
+    constructor( dom, args, gameLoader ){
+        
         this.dom = dom;
         this.args = args;
+        this.gameLoader = gameLoader;
+
+    }
+    
+    getUser(){
+        return this.gameLoader.getUser();
+    }
+
+    async restReq( task, args ){
+
+        const req = new Fetch(this.gameLoader.label, task, args);
+        return await req.run();
+
     }
 
     async setMode( mode ){

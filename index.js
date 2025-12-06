@@ -7,17 +7,27 @@ import { dirname } from 'path';
 import DBConnection from './server/DBConnection.js';
 import Config from './config.js';
 
+import Jeopardy from './server/jeopardy/_game.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
 // Load up the DB connections
-const connGame = new DBConnection(Config.db_game_user, Config.db_game_pass, Config.db_game_db);
+const connGame = new DBConnection(
+    Config.db_game_user, 
+    Config.db_game_pass, 
+    Config.db_game_db
+);
 (async () => {
 
     await connGame.connect();
-
-    Rest.init(connGame);
+    console.log("SQL connection established");
+    const q = await connGame.query("SELECT * from jp_games");
+    Rest
+        .init(connGame)
+        .addGame('jeopardy', Jeopardy)
+    ;
 
     const port = 8090;
     const app = express();

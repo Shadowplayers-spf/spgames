@@ -1,3 +1,5 @@
+import DBLoader from "./_DBLoader.js";
+import DBConnection from "./DBConnection.js";
 import User from "./User.js";
 
 export default class Rest{
@@ -7,11 +9,14 @@ export default class Rest{
 	static dbGames = null;
 	static init( dbGames ){
 		this.dbGames = dbGames;
+		DBLoader.init(this.dbGames);
+		return this;
 	}
 	static addGame( label, gConstructor ){
 		if( label === "server" )
 			throw new Error("Game cannot be labeled server");
 		this.games.set(label, gConstructor);
+		return this;
 	}
 
 
@@ -61,8 +66,10 @@ export default class Rest{
 		this.user = await User.fromToken(this.body.__token);
 
 		// Throwing 403 tells the app to log out
-		if( !this.user.exists() )
+		if( !this.user.exists() ){
+			console.log("User does not exist with token", this.body.__token);
 			throw 403;
+		}
 
 		// User level privilege
 		if( typeof targ['usr'+fnName] === "function" )
