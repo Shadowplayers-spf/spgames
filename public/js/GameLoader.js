@@ -13,11 +13,15 @@ export default class Game extends AutoLoader{
 							// index.js should export Game and Editor classes.
 	obj = null;				// Game object, should extend GameTemplate
 	
-	constructor( data = {} ){
+	constructor( data = {}, parent ){
 		super(data);
-
+		this.parent = parent;
 
 		this.load(data);
+	}
+
+	getUser(){
+		return this.parent.user;
 	}
 
 	exists(){
@@ -38,7 +42,7 @@ export default class Game extends AutoLoader{
 		if( this.obj !== null )
 			return;
 		const constructor = await import('../games/'+this.loader+"/index.js");
-		this.obj = new constructor.default(dom, args);
+		this.obj = new constructor.default(dom, args, this);
 		console.log("Fetched game obj", this.obj);
 
 	}

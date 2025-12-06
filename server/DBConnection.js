@@ -4,23 +4,24 @@ export default class DBConnection{
 
 	user = '';
 	pass = '';
-	server = '';
+	db = '';
 	pool = null;
 
-	constructor( user, pass, server ){
+	constructor( user, pass, db ){
 
 		this.user = user;
 		this.pass = pass;
-		this.server = server;
+		this.db = db;
 
 	}
 
 	async connect(){
 		
 		this.pool = Mariadb.createPool({
-			host : this.server,
+			host : "webgames-db",
 			user : this.user,
 			password : this.pass,
+			database : this.db,
 			connectionLimit : 10,
 		});
 
@@ -29,6 +30,7 @@ export default class DBConnection{
 	async query(q, args = []){
 
 		const conn = await this.pool.getConnection();
+		console.log(q, args);
 		return await conn.query(q, args);
 
 	}

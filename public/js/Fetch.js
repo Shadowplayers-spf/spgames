@@ -26,7 +26,7 @@ export default class Fetch{
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 
-		console.log("Postdata", this.postdata);
+		console.log(url, this.postdata);
 		const res = await fetch(url, {
 			headers: headers, 
 			method: 'POST', 

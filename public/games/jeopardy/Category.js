@@ -17,6 +17,7 @@ export default class Category extends AutoLoader{
 
         this.load(data);
     }
+    
 
     
 
