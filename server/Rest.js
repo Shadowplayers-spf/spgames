@@ -30,8 +30,9 @@ export default class Rest{
 
 	constructor( req, db ){
 
+		console.log("Path", req.path);
 		// Parse the path
-		const path = req.path.split('/').filter(x => x !== '');
+		const path = req.path.split('/').filter(x => x !== '').map(el => decodeURIComponent(el));
 		this.game = path[1]; // Note: 0 is just "api"
 		this.task = path[2];
 		this.args = path.slice(3);

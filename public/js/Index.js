@@ -150,6 +150,7 @@ export default class Index{
 		let spl = hash.split("/");
 		this.page = spl.shift();
 		this.args = spl;
+
 		this.drawActivePage();
 
 	}
@@ -157,8 +158,8 @@ export default class Index{
 	async drawActivePage(){
 
 		const loggedIn = this.user.exists();
-		const page = this.page;
-
+		const page = this.page;		// label of page, first arg of hashpath, should be Index.Page.*
+		
 		document.getElementById("public").classList.toggle("hidden", loggedIn || page !== "");
 		document.getElementById("private").classList.toggle("hidden", !loggedIn || page !== "");
 
@@ -174,9 +175,9 @@ export default class Index{
 					await this.setGameByLabel(gameLabel);
 				
 				if( page == Index.Page.Host )
-					await this.activeGame.loadHost(gameDiv, this.args);
+					await this.activeGame.loadHost(gameDiv, this.args.slice(1));
 				else
-					await this.activeGame.loadEditor(gameDiv, this.args);
+					await this.activeGame.loadEditor(gameDiv, this.args.slice(1));
 
 			}
 			else if( page === Index.Page.Play ){

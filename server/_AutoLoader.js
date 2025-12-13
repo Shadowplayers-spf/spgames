@@ -44,8 +44,8 @@ export default class AutoLoader{
 				let type = typeof this[i];
 				this[i] = structuredClone(data[i]);
 				if( type === "number" || type === "boolean" )
-					this[i] = +this[i];
-
+					this[i] = Number(this[i]);
+				
 			}
 
 		} 

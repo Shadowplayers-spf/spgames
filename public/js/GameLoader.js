@@ -36,6 +36,17 @@ export default class Game extends AutoLoader{
 
 	}
 
+	nav( page, args = [] ){
+
+
+		let hash = "#"+GameTemplate.ModeNames[this.obj.mode] + "/" + this.label + "/";
+		if( page )
+			hash += page;
+		hash += "/" + args.join("/");
+		window.location.hash = hash;
+
+	}
+
 	// Fetches the code we need and sets this.obj
 	async fetchObj( dom, args ){
 
@@ -43,7 +54,6 @@ export default class Game extends AutoLoader{
 			return;
 		const constructor = await import('../games/'+this.loader+"/index.js");
 		this.obj = new constructor.default(dom, args, this);
-		console.log("Fetched game obj", this.obj);
 
 	}
 
@@ -54,8 +64,11 @@ export default class Game extends AutoLoader{
 	}
 
 	async loadEditor( dom, args ){
+		
 		await this.fetchObj(dom, args);
+		this.obj.args = args;
 		await this.obj.setMode(GameTemplate.Mode.Edit);
+
 	}
 
 	async loadHost( dom, args ){

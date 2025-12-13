@@ -31,7 +31,16 @@ export default class DBConnection{
 
 		const conn = await this.pool.getConnection();
 		console.log(q, args);
-		return await conn.query(q, args);
+		let out;
+		try{
+			out = await conn.query(q, args);
+		}catch(err){
+			console.error(err);
+			out = false;
+			
+		}
+		conn.release();
+		return out;
 
 	}
 

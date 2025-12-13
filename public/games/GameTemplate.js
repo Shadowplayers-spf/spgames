@@ -10,6 +10,11 @@ export default class GameTemplate{
         Edit : 2,
         Host : 3
     };
+    static ModeNames = {
+        [GameTemplate.Mode.Play] : "play",
+        [GameTemplate.Mode.Edit] : "edit",
+        [GameTemplate.Mode.Host] : "host"
+    };
 
     dom = null;     // Dom element we're working in
     args = [];      // Location args
@@ -30,6 +35,12 @@ export default class GameTemplate{
         this.gameLoader = gameLoader;
 
     }
+
+    nav( page, args = [] ){
+        
+        this.gameLoader.nav(page, args);
+
+    }
     
     getUser(){
         return this.gameLoader.getUser();
@@ -43,11 +54,10 @@ export default class GameTemplate{
     }
 
     async setMode( mode ){
-        
-        if( this.mode === mode )
-            return;
 
         await this.destructor();
+        this.dom.replaceChildren();
+
         this.mode = mode;
         if( this.mode === GameTemplate.Mode.Play )
             await this.loadGame();

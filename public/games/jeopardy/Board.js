@@ -21,8 +21,6 @@ export default class Board extends AutoLoader{
     static async getAllAvailableToUser( gameIndex ){
         // Recache
         const assets = await gameIndex.restReq("GetBoardsAvailableToUser");
-        for( let asset of assets )
-            this.addToCache(asset);
         return assets;
 
     }

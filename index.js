@@ -47,7 +47,7 @@ const connGame = new DBConnection(
             out = {
                 error : err.message || err
             };
-            console.error("Hit an error:", err.message || err);
+            console.error("Hit an error:", err);
         }
 
         res.json(out);

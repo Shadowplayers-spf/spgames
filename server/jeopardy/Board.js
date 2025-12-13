@@ -3,6 +3,7 @@ import DBLoader from "../_DBLoader.js";
 export default class Board extends DBLoader{
     
     static table = "jp_boards";
+    static no_save = ["created", "updated"];
 
     name = "";
     creator = 0;
