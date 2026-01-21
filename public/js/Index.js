@@ -34,7 +34,9 @@ export default class Index{
 			this.computerId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
 		this.registeredGames = [
-			new GameLoader({label:"jeopardy", name:"Jeopardy", loader:"jeopardy"}, this)
+			new GameLoader({
+				label:"jeopardy", name:"Jeopardy", loader:"jeopardy", css : true
+			}, this)
 		];
 
 		this.modalWrapper.addEventListener("click", () => {
@@ -66,6 +68,11 @@ export default class Index{
 			throw new Error("Game not found");
 
 		this.activeGame = game;
+		if( !game._cssFile ){
+			const link = game.getCssFile();
+			if( link )
+				document.head.appendChild(link);
+		}
 		
 	}
 

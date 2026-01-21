@@ -1,0 +1,16 @@
+body{
+	background-color:#DEF;
+}
+
+table.gameBoard td, table.gameBoard th{
+	padding:1vmax;
+	font-size:2vmax;
+	text-align: center;
+	width:12vmax;
+	height:6vmax;
+	border:1px solid #000;
+}
+table.gameBoard th{
+	height:4vmax;
+}
+

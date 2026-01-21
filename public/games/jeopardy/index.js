@@ -1,6 +1,7 @@
 import GameTemplate from "../GameTemplate.js";
 import * as Dom from "../../js/_Dom.js";
 import Board from "./Board.js";
+import Category from "./Category.js";
 
 export default class Game extends GameTemplate{
 
@@ -19,10 +20,56 @@ export default class Game extends GameTemplate{
 	}
 
 
-	async subEditorBoard( args = [] ){
+	async subEditorBoard( id ){
 		
 		const dom = this.dom;
-		Dom.create("h1", {text:"Todo: Edit a board"}, dom);
+		const board = await Board.getById(this, id);
+		const categories = await board.getCategories(true);
+
+		Dom.create("h1", {text:"Editing Board '" + board.name + "'"}, dom);
+
+		for( let round = 0; round < 2; ++round )
+			await board.appendTable(round, dom, true);
+		
+		document.querySelectorAll('table.gameBoard th').forEach(el => {
+			el.addEventListener("click", async event => {
+				
+				const globalCatIndex = Math.trunc(el.dataset.categoryIdx) + Board.CATEGORIES_PER_ROUND * el.dataset.roundIdx;
+				let cat = categories[globalCatIndex];
+				if( !cat ){
+					console.log("Todo: Create a category and save it to DB");
+				}
+
+				console.log("Todo: Draw category name editor for", cat);
+
+			});
+		});
+		document.querySelectorAll('table.gameBoard td').forEach(el => {
+			el.addEventListener("click", async event => {
+				
+				const globalCatIndex = Math.trunc(el.dataset.categoryIdx) + Board.CATEGORIES_PER_ROUND * el.dataset.roundIdx;
+				const questionIndex = el.dataset.questionIdx;
+
+				let cat = categories[globalCatIndex];
+				if( !cat ){
+					console.log("Todo: Create a category and save it to DB");
+				}
+
+				let question = await cat.getQuestionByIndex(questionIndex);
+				if( !question ){
+					console.log("Todo: Create a question and save it to DB");
+				}
+
+				console.log("Todo: Draw question editor");
+				
+			});
+		});
+		
+
+
+		console.log(board, categories);
+
+		
 
 	}
 
@@ -96,20 +143,23 @@ export default class Game extends GameTemplate{
 
 	}
 
+	// This runs when hash path starts with #edit
+	// Hash path has #<editor|host>/<game>/<task>/<arg1/arg2...>
 	async loadEditor(){
 
-		
+		// First arg here (arg[2] of path) is the task
 		let task = this.args[0];
 		let args = this.args.slice(1);
 
 		if( task === "board" )
-			return this.subEditorBoard(args);
+			return this.subEditorBoard(...args);
 		else
 			return this.subEditorControlPanel();
 
 	}
 
 
+	// Thsi runs when path starts with #host
 	async loadHost(){
 		
 	}

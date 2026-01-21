@@ -27,6 +27,10 @@ export function create( type, options, parent ){
 			out.innerText = options.text;
 		if( options.html )
 			out.innerHTML = options.html;
+		if( options.dataset ){
+			for( let i in options.dataset )
+				out.dataset[i] = options.dataset[i];
+		}
 
 	}
 	else

@@ -12,7 +12,9 @@ export default class Fetch{
 
 		this.game = game;
 		this.task = task;
-		this.args = args;
+		this.args = Array.isArray(args) ? args : [args];
+		if( args === undefined )
+			this.args = [];
 		this.postdata = structuredClone(postdata);
 		if( typeof this.postdata !== "object" )
 			this.postdata = {};
